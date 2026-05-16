@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { cuestionariosZero, tiposContenedores } from './data/circularData';
-import { Egg, Package, GlassWater, FileText, Trash2, Radio, BookOpen, ChevronDown, ChevronUp, Ticket, ShoppingBag, Percent } from 'lucide-react';
+import { Egg, Package, GlassWater, FileText, Trash2, Radio, BookOpen, ChevronDown, ChevronUp, Ticket, ShoppingBag, Percent, Video, FileDown } from 'lucide-react';
 
 // =================================================================
 // COMPONENTE INTERNO: MAPA CIVIC
@@ -125,7 +125,7 @@ function ModuloCalendario() {
 }
 
 // =================================================================
-// COMPONENTE INTERNO: CENTRO DE MULTIMEDIA E INFO (NotebookLM Hub)
+// COMPONENTE INTERNO: CENTRO DE MULTIMEDIA E INFO (Hub de Recursos)
 // =================================================================
 function ModuloMultimedia() {
   const [acordeonAbierto, setAcordeonAbierto] = useState(null);
@@ -137,14 +137,14 @@ function ModuloMultimedia() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
-      {/* 1. SECCIÓN AUDIO: PODCAST REVOLUCIÓN LOCAL */}
+      {/* SECCIÓN AUDIO: PODCAST FORMATIVO */}
       <div style={{ backgroundColor: '#F1F8E9', padding: '20px', borderRadius: '10px', border: '1px solid #C5E1A5', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Radio size={24} color="#2E7D32" />
-          <h3 style={{ margin: 0, color: '#1B5E20', fontSize: '1.2rem' }}>Podcast: La Revolución del Ahorro Local</h3>
+          <h3 style={{ margin: 0, color: '#1B5E20', fontSize: '1.15rem' }}>Audio: La Revolución del Ahorro Local</h3>
         </div>
-        <p style={{ margin: 0, color: '#555', fontSize: '0.95rem' }}>
-          Escucha la tertulia analítica generada sobre el impacto de la Ley 7/2022 y el balance económico en el eje logístico Elda-Villena-Petrer.
+        <p style={{ margin: 0, color: '#555', fontSize: '0.9rem' }}>
+          Análisis profundo sobre el impacto del canon de la Ley 7/2022 y el balance de costes en el eje logístico Elda-Villena.
         </p>
         <audio controls style={{ width: '100%', marginTop: '5px' }}>
           <source src="/media/podcast-elda.m4a" type="audio/mp4" />
@@ -152,63 +152,66 @@ function ModuloMultimedia() {
         </audio>
       </div>
 
-      {/* 2. SECCIÓN VÍDEO: VIDEO-TUTORIAL VIBE BOOGIE POP */}
-      <div style={{ backgroundColor: '#FFF3E0', padding: '20px', borderRadius: '10px', border: '1px solid #FFE0B2', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* SECCIÓN VIDEO: EXPLICATIVO ANIMADO */}
+      <div style={{ backgroundColor: '#E3F2FD', padding: '20px', borderRadius: '10px', border: '1px solid #90CAF9', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Radio size={24} color="#E65100" />
-          <h3 style={{ margin: 0, color: '#E65100', fontSize: '1.2rem' }}>Vídeo Presentación: Vibe Boogie Pop Art</h3>
+          <Video size={24} color="#0D47A1" />
+          <h3 style={{ margin: 0, color: '#0D47A1', fontSize: '1.15rem' }}>Vídeo: Concepto Vibe Boogie Pop</h3>
         </div>
-        <p style={{ margin: 0, color: '#555', fontSize: '0.95rem' }}>
-          Concepto audiovisual animado sobre la ingeniería de residuo cero y la interfaz del Civic OS.
+        <p style={{ margin: 0, color: '#555', fontSize: '0.9rem' }}>
+          Pieza audiovisual animada explicativa orientada a la ingeniería de residuo cero y la validación cívica.
         </p>
-        <video controls style={{ width: '100%', borderRadius: '6px', backgroundColor: '#000', maxHeight: '240px' }}>
+        <video controls style={{ width: '100%', borderRadius: '6px', backgroundColor: '#000', maxHeight: '220px' }}>
           <source src="/media/vibe-boogie-pop.mp4" type="video/mp4" />
           Tu navegador no soporta la reproducción de vídeo nativa.
         </video>
       </div>
 
-      {/* 3. SECCIÓN RECURSOS GRÁFICOS: PRESENTACIÓN E IMAGEN */}
-      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <h3 style={{ margin: 0, color: '#333', fontSize: '1.2rem', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-          🖼️ Recursos y Diapositivas Estratégicas
+      {/* SECCIÓN DOCUMENTOS Y CONTENEDORES DE EDIFICIO */}
+      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', border: '1px solid #eee', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <h3 style={{ margin: 0, color: '#333', fontSize: '1.15rem', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+          📂 Presentaciones y Modelos Técnicos
         </h3>
 
-        {/* Tarjeta del PDF Estratégico */}
+        {/* Descarga del PDF de Estrategia */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '6px', border: '1px solid #eee' }}>
-          <div>
-            <strong style={{ display: 'block', color: '#2E7D32' }}>📄 Elda_Circular_Strategy.pdf</strong>
-            <span style={{ fontSize: '0.85rem', color: '#666' }}>Diapositivas oficiales de la presentación del proyecto técnico.</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <FileDown size={22} color="#2E7D32" />
+            <div>
+              <strong style={{ display: 'block', color: '#333', fontSize: '0.95rem' }}>Elda_Circular_Strategy.pdf</strong>
+              <span style={{ fontSize: '0.8rem', color: '#666' }}>Diapositivas y ruta del plan de gestión municipal.</span>
+            </div>
           </div>
           <a 
             href="/media/Elda_Circular_Strategy.pdf" 
             download
-            style={{ backgroundColor: '#2E7D32', color: '#fff', textDecoration: 'none', padding: '8px 12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '0.85rem' }}
+            style={{ backgroundColor: '#2E7D32', color: '#fff', textDecoration: 'none', padding: '8px 12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '0.8rem' }}
           >
             Descargar
           </a>
         </div>
 
-        {/* Muestra del Diseño del Contenedor de Edificio */}
+        {/* Visualización del Contenedor de Edificio */}
         <div style={{ marginTop: '5px' }}>
-          <strong style={{ display: 'block', marginBottom: '8px', color: '#333' }}>📦 Diseño de Contenedores Plegables para Edificios:</strong>
-          <div style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid #ddd' }}>
+          <strong style={{ display: 'block', marginBottom: '8px', color: '#333', fontSize: '0.95rem' }}>📦 Diseño de Contenedores Plegables para Edificios:</strong>
+          <div style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid #ddd', backgroundColor: '#fafafa' }}>
             <img 
               src="/media/imagen-containers.jpeg" 
-              alt="Diseño contenedores plegables para edificios" 
-              style={{ width: '100%', display: 'block', height: 'auto', maxHeight: '200px', objectFit: 'cover' }}
-              onError={(e) => { e.target.style.display = 'none'; }} // Evita icono roto si aún no has movido el archivo
+              alt="Diseño contenedores plegables edificios" 
+              style={{ width: '100%', display: 'block', height: 'auto', maxHeight: '180px', objectFit: 'cover' }}
+              onError={(e) => { e.target.style.display = 'none'; }}
             />
           </div>
-          <p style={{ margin: '6px 0 0 0', fontSize: '0.85rem', color: '#666', fontStyle: 'italic' }}>
-            Vista previa del mobiliario urbano adaptativo propuesto para rellanos y comunidades privadas.
+          <p style={{ margin: '6px 0 0 0', fontSize: '0.8rem', color: '#666', fontStyle: 'italic' }}>
+            Mobiliario adaptativo propuesto para rellanos y comunidades de vecinos privadas.
           </p>
         </div>
       </div>
 
-      {/* 4. ACORDEONES DE CONSULTA MAESTRA */}
+      {/* SECCIÓN ACORDEONES INFORMATIVOS */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <h3 style={{ margin: '10px 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem' }}>
-          <BookOpen size={20} /> Documentación del Plan Maestro 2026
+          <BookOpen size={20} /> Documentación de Consulta Rápida
         </h3>
 
         <div style={{ border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden' }}>
@@ -276,50 +279,6 @@ function ModuloMultimedia() {
   );
 }
 
-        {/* ACORDEÓN 3: INGENIERÍA SOCIAL (GENERACIÓN Z-ERO) */}
-        <div style={{ border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden' }}>
-          <button 
-            onClick={() => toggleAcordeon('zero')}
-            style={{ width: '100%', padding: '15px', backgroundColor: '#fff', border: 'none', textAlign: 'left', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
-          >
-            🎒 Estrategia Escolar "Generación Z-ero"
-            {acordeonAbierto === 'zero' ? <ChevronUp size={18}/> : <ChevronDown size={18}/>}
-          </button>
-          {acordeonAbierto === 'zero' && (
-            <div style={{ padding: '15px', backgroundColor: '#fafafa', borderTop: '1px solid #ddd', fontSize: '0.95rem', lineHeight: '1.5' }}>
-              <p style={{ margin: '0 0 10px 0' }}>Transformación de los centros educativos de Elda en motores activos de concienciación:</p>
-              <ul>
-                <li><strong>El Tesoro de los 90€ (Primaria):</strong> Dinámica de patio donde se visualiza el dinero que el centro pierde cada vez que un residuo reciclable termina erróneamente en la fracción gris.</li>
-                <li><strong>Viernes de Trazabilidad:</strong> Visitas técnicas concertadas a las instalaciones de <em>Reciclajes Elda</em> (Campo Alto) y el Ecoparque fijo del <em>Consorcio CREA</em> para auditar la clasificación del material.</li>
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {/* ACORDEÓN 4: DESPLIEGUE GEOGRÁFICO Y LOGÍSTICO */}
-        <div style={{ border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden' }}>
-          <button 
-            onClick={() => toggleAcordeon('logistica')}
-            style={{ width: '100%', padding: '15px', backgroundColor: '#fff', border: 'none', textAlign: 'left', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
-          >
-            🗺️ Logística Territorial por Sectores
-            {acordeonAbierto === 'logistica' ? <ChevronUp size={18}/> : <ChevronDown size={18}/>}
-          </button>
-          {acordeonAbierto === 'logistica' && (
-            <div style={{ padding: '15px', backgroundColor: '#fafafa', borderTop: '1px solid #ddd', fontSize: '0.95rem', lineHeight: '1.5' }}>
-              <p style={{ margin: '0 0 10px 0' }}>Adaptación operativa según la morfología urbana de cada barrio eldense:</p>
-              <ul>
-                <li><strong>Núcleo Peatonal y Casco Histórico:</strong> Implantación estricta de las *Esquinas de Quita y Pon*. Retirada completa de contenedores fijos de la vía pública durante el día.</li>
-                <li><strong>Sectores Periféricos:</strong> Transición controlada hacia el Sistema de Recogida por Aportación Individualizada (SRAI), reduciendo la distancia de desplazamiento a un radio de 50-80 metros.</li>
-              </ul>
-            </div>
-          )}
-        </div>
-
-      </div>
-    </div>
-  );
-}
 // =================================================================
 // COMPONENTE PRINCIPAL (APPLICATION MASTER)
 // =================================================================
@@ -435,7 +394,7 @@ export default function App() {
         {pestanaActiva === 'depositos' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
             <section style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-              <h2>Módulo de Trazabilidad y Validación (Simulador QR)</h2>
+              <h2>Módulo de Trazabilidad y Validation (Simulador QR)</h2>
               <p style={{ color: '#666' }}>Selecciona un contenedor e indica qué residuo vas a depositar para comprobar su pureza.</p>
               <div style={{ display: 'flex', gap: '15px', flexDirection: 'column', maxWidth: '500px', marginTop: '15px' }}>
                 <div>
@@ -553,7 +512,7 @@ export default function App() {
 
       </main>
 
-      {/* Barra de Navegación Inferior Fija (4 BOTONES) */}
+      {/* Barra de Navegación Inferior Fija (4 BOTONES - INTEGRACIÓN TOTAL) */}
       <nav style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, backgroundColor: '#fff', borderTop: '1px solid #ddd',
         display: 'flex', justifyContent: 'space-around', padding: '15px 0', boxShadow: '0 -2px 10px rgba(0,0,0,0.05)', zIndex: 1000
