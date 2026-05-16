@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cuestionariosZero, tiposContenedores } from './data/circularData';
-import { Trash2, Radio, BookOpen, ChevronDown, ChevronUp, Ticket, ShoppingBag, Percent, Video, Menu, MapPin, CheckCircle } from 'lucide-react';
+import { Trash2, Radio, BookOpen, ChevronDown, ChevronUp, Ticket, ShoppingBag, Percent, Video, Menu, MapPin, CheckCircle, Play, Pause } from 'lucide-react';
 
 // Endpoint local de tu servidor XAMPP (Apache + MySQL)
 const XAMPP_API_URL = "http://localhost/elda-circular-api";
@@ -103,7 +103,7 @@ function ModuloMultimedia() {
           </button>
           {acordeonAbierto === 'rent' && (
             <div style={{ padding: '15px', backgroundColor: '#fafafa', borderTop: '1px solid #e2e8f0', fontSize: '0.85rem', lineHeight: '1.5', color: '#4a5568' }}>
-              <strong>Materia Orgánica (Contenedor Marrón):</strong> Coste en planta de ~38,62€/Tratamiento. Al evitar la mezcla en la fracción Resto (cuya penalización es de 125€/Tn), se inyecta un superávit logístico directo de <strong>+51,38€ por tonelada</strong> recuperada.
+              <strong>Materia Orgánica (Contenedor Marrón):</strong> Coste en planta de ~38,62€/Tratamiento. Al evitar la mezcla en la fraction Resto (cuya penalización es de 125€/Tn), se inyecta un superávit logístico directo de <strong>+51,38€ por tonelada</strong> recuperada.
             </div>
           )}
         </div>
@@ -119,6 +119,7 @@ export default function App() {
   const [pestanaActiva, setPestanaActiva] = useState('mapa');
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [slideIndice, setSlideIndice] = useState(0);
+  const [reproduccionActiva, setReproduccionActiva] = useState(true); // Estado para Pausa/Play del carrusel solas
   const [eldaCoins, setEldaCoins] = useState(() => {
     const guardadas = localStorage.getItem('eldaCoins');
     return guardadas ? parseInt(guardadas, 10) : 120;
@@ -138,7 +139,19 @@ export default function App() {
     { id: 'tasa', nombre: 'Descuento 20€ Tasa Basura', coste: 150, icono: Percent }
   ];
 
-  // CORRECCIÓN MAESTRA: Añade el cero a la izquierda de forma exacta y limpia (01, 02, etc.)
+  // EFECTO DINÁMICO: Ejecuta el paso automático de diapositivas cada 3 segundos
+  useEffect(() => {
+    let temporizador = null;
+    if (reproduccionActiva && pestanaActiva === 'mapa') {
+      temporizador = setInterval(() => {
+        setSlideIndice((prev) => (prev + 1) % 10);
+      }, 3000); // 3000 milisegundos = 3 segundos
+    }
+    return () => {
+      if (temporizador) clearInterval(temporizador);
+    };
+  }, [reproduccionActiva, pestanaActiva]);
+
   const formatearSlide = (idx) => {
     const numReal = idx + 1;
     return numReal < 10 ? `0${numReal}` : `${numReal}`;
@@ -191,7 +204,7 @@ export default function App() {
           🪙 {eldaCoins} Elda-Coins
         </div>
 
-        {/* Desplegable Combo */}
+        {/* Desplegable Combo Menu */}
         {menuAbierto && (
           <div style={{
             position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#fff',
@@ -212,24 +225,46 @@ export default function App() {
         {pestanaActiva === 'mapa' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
             
-            {/* PARTE SUPERIOR: EL GRAN SLIDESHOW EN RATIO PANORÁMICO HORIZONTAL 16:9 (CORREGIDO A .png) */}
-            <section style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', border: '1px solid #e2e8f0' }}>
-              <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9', position: 'relative', border: '1px solid #edf2f7' }}>
+            {/* PARTE SUPERIOR: MARCO DEL CARRUSEL ESTRUCTURADO (IMAGEN 20% MÁS PEQUEÑA) */}
+            <section style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              
+              {/* Contenedor un 20% más pequeño respecto al total (width: 80%) */}
+              <div style={{ width: '80%', aspectRatio: '16/9', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9', position: 'relative', border: '1px solid #edf2f7' }}>
                 <img 
                   src={`/media/slide${formatearSlide(slideIndice)}.png`}
                   alt={`Diapositiva ${slideIndice + 1}`}
                   style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
                 />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(26, 32, 44, 0.85)', color: '#fff', padding: '14px', textAlign: 'center', fontSize: '0.9rem', backdropFilter: 'blur(4px)' }}>
-                  <strong>{titulosSlides[slideIndice]}</strong> | Presentación Ejecutiva Partner Elda
+                
+                {/* Botón Flotante Superior de Pausa/Play */}
+                <button 
+                  onClick={() => setReproduccionActiva(!reproduccionActiva)}
+                  style={{
+                    position: 'absolute', top: '15px', right: '15px', backgroundColor: 'rgba(46, 125, 50, 0.9)',
+                    color: 'white', border: 'none', padding: '8px 12px', borderRadius: '30px', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold', fontSize: '0.8rem', boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+                  }}
+                >
+                  {reproduccionActiva ? <Pause size={14} /> : <Play size={14} />}
+                  {reproduccionActiva ? "Pausar" : "Reanudar"}
+                </button>
+
+                {/* TEXTO DE ABAJO CORREGIDO (MÁS GRANDE Y DIRECTO) */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(26, 32, 44, 0.9)', color: '#fff', padding: '18px', textAlign: 'center', backdropFilter: 'blur(4px)' }}>
+                  <strong style={{ fontSize: '1.2rem', display: 'block', color: '#81C784', marginBottom: '4px' }}>
+                    {titulosSlides[slideIndice]}
+                  </strong>
+                  <span style={{ fontSize: '1rem', opacity: 0.95, fontWeight: '500' }}>
+                    Plan Maestro de Ingeniería Social y Logística Urbana de Elda
+                  </span>
                 </div>
               </div>
 
-              {/* Controles del Carrusel */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
-                <button onClick={() => setSlideIndice((prev) => (prev - 1 + 10) % 10)} style={{ backgroundColor: '#edf2f7', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>◀ Diapositiva Anterior</button>
-                <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#4a5568', backgroundColor: '#f1f5f9', padding: '4px 12px', borderRadius: '12px' }}>{slideIndice + 1} / 10</span>
-                <button onClick={() => setSlideIndice((prev) => (prev + 1) % 10)} style={{ backgroundColor: '#2E7D32', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>Siguiente Diapositiva ▶</button>
+              {/* Controles del Carrusel (Botones Manuales de Apoyo) */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', width: '80%' }}>
+                <button onClick={() => { setSlideIndice((prev) => (prev - 1 + 10) % 10); setReproduccionActiva(false); }} style={{ backgroundColor: '#edf2f7', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>◀ Anterior</button>
+                <span style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#4a5568', backgroundColor: '#f1f5f9', padding: '6px 16px', borderRadius: '12px' }}>{slideIndice + 1} / 10 { !reproduccionActiva && "⏸️ (Pausado)" }</span>
+                <button onClick={() => { setSlideIndice((prev) => (prev + 1) % 10); setReproduccionActiva(false); }} style={{ backgroundColor: '#2E7D32', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>Siguiente ▶</button>
               </div>
             </section>
 
@@ -273,7 +308,7 @@ export default function App() {
 
             <div style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '1.1rem' }}>Formulario de Registro de Entrega</h3>
-              <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '6px', fontSize: '0.9rem' }}>1. Seleccionar Contenedor de Destino (Código QR Ubicación):</label>
+              <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '6px', fontSize: '0.9rem' }}>1. Seleccionar Contenedor de Destino:</label>
               <select id="selectContenedor" style={{ width: '100%', padding: '12px', borderRadius: '8px', marginBottom: '16px', border: '1px solid #cbd5e0', fontSize: '0.9rem' }}>
                 {tiposContenedores.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
               </select>
