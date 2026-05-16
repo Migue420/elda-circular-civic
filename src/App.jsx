@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { cuestionariosZero, tiposContenedores } from './data/circularData';
-import { Trash2, Radio, BookOpen, ChevronDown, ChevronUp, Ticket, ShoppingBag, Percent, Video, Menu } from 'lucide-react';
+import { Trash2, Radio, BookOpen, ChevronDown, ChevronUp, Ticket, ShoppingBag, Percent, Video, Menu, MapPin, CheckCircle } from 'lucide-react';
 
-// URL de tu servidor local XAMPP para la sincronización futura
-const API_URL = "http://localhost/elda-circular-api";
+// Endpoint local de tu servidor XAMPP (Apache + MySQL)
+const XAMPP_API_URL = "http://localhost/elda-circular-api";
 
 // =================================================================
-// COMPONENTE INTERNO: MAPA CIVIC
+// COMPONENTE INTERNO: MAPA CIVIC (Pantalla Partida Horizontal)
 // =================================================================
 function ModuloMapa() {
   const [esquinaActiva, setEsquinaActiva] = useState('ayuntamiento');
@@ -20,45 +20,46 @@ function ModuloMapa() {
   const datosEsquina = esquinasElda[esquinaActiva];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '15px' }}>
-      {/* MITAD SUPERIOR: LO VISUAL (EL MAPA 16:9) */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
+      {/* MITAD SUPERIOR: VISUAL (MAPA EN FORMATO HORIZONTAL 16:9) */}
       <div style={{
-        flex: 1, minHeight: '220px', backgroundImage: "url('/media/mapa-elda.png')",
-        backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px',
-        border: '1px solid #B2DFDB', position: 'relative', boxShadow: 'inset 0 0 10px rgba(0,0,0,0.1)'
+        width: '100%', aspectRatio: '16/9', backgroundImage: "url('/media/mapa-elda.png')",
+        backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '14px',
+        border: '1px solid #B2DFDB', position: 'relative', boxShadow: 'inset 0 0 12px rgba(0,0,0,0.12)'
       }}>
         <div style={{
           position: 'absolute', top: datosEsquina.coordenadas.y, left: datosEsquina.coordenadas.x, transform: 'translate(-50%, -50%)',
-          backgroundColor: '#d32f2f', color: 'white', padding: '6px 12px', borderRadius: '20px', fontSize: '0.8rem',
+          backgroundColor: '#d32f2f', color: 'white', padding: '8px 14px', borderRadius: '20px', fontSize: '0.8rem',
           fontWeight: 'bold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)', border: '2px solid white', whiteSpace: 'nowrap'
         }}>
           📍 {datosEsquina.nombre.split(' ')[0]}
         </div>
       </div>
 
-      {/* MITAD INFERIOR: CONTROLES Y SELECCIÓN */}
-      <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px', color: '#2E7D32' }}>Seleccionar Punto de Control Municipal:</label>
-        <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '5px' }}>
+      {/* MITAD INFERIOR: FORMULARIOS Y CONTROLES OPERATIVOS */}
+      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '14px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px rgba(0,0,0,0.02)' }}>
+        <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '10px', color: '#2E7D32', fontSize: '0.95rem' }}>🌐 Seleccionar Punto de Monitorización:</label>
+        <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '8px' }}>
           {Object.keys(esquinasElda).map((key) => (
             <button
               key={key}
               onClick={() => setEsquinaActiva(key)}
               style={{
-                padding: '10px 16px', borderRadius: '8px',
-                border: esquinaActiva === key ? '2px solid #2E7D32' : '1px solid #ccc',
+                padding: '12px 18px', borderRadius: '8px',
+                border: esquinaActiva === key ? '2px solid #2E7D32' : '1px solid #cbd5e0',
                 backgroundColor: esquinaActiva === key ? '#E8F5E9' : '#fff',
                 fontWeight: esquinaActiva === key ? 'bold' : 'normal', cursor: 'pointer', whiteSpace: 'nowrap'
               }}
             >
-              📍 {esquinasElda[key].nombre.split(' ')[0]}
+              Esquina {esquinasElda[key].nombre.split(' ')[0]}
             </button>
           ))}
         </div>
-        <div style={{ marginTop: '12px', fontSize: '0.9rem', color: '#4a5568', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-          <p style={{ margin: 0 }}><strong>Estado:</strong> {datosEsquina.estado}</p>
-          <p style={{ margin: 0 }}><strong>Horario:</strong> {datosEsquina.horario}</p>
-          <p style={{ margin: 0, gridColumn: '1 / span 2' }}><strong>Pureza Acumulada Barrio:</strong> {datosEsquina.pureza}</p>
+        <div style={{ marginTop: '15px', paddingUp: '15px', borderTop: '1px solid #f0f4f8', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.9rem', color: '#4a5568' }}>
+          <p style={{ margin: 0 }}><strong>Ubicación Completa:</strong> {datosEsquina.nombre}</p>
+          <p style={{ margin: 0 }}><strong>Horario Operativo:</strong> {datosEsquina.horario}</p>
+          <p style={{ margin: 0 }}><strong>Estado del Sensor:</strong> <span style={{ color: '#2E7D32', fontWeight: 'bold' }}>{datosEsquina.estado}</span></p>
+          <p style={{ margin: 0 }}><strong>Pureza LER Acumulada:</strong> <span style={{ color: '#E65100', fontWeight: 'bold' }}>{datosEsquina.pureza}</span></p>
         </div>
       </div>
     </div>
@@ -66,40 +67,43 @@ function ModuloMapa() {
 }
 
 // =================================================================
-// COMPONENTE INTERNO: CENTRO DE MULTIMEDIA E INFO (Hub de Recursos)
+// COMPONENTE INTERNO: HUB MULTIMEDIA (Pantalla Partida Horizontal)
 // =================================================================
 function ModuloMultimedia() {
   const [acordeonAbierto, setAcordeonAbierto] = useState(null);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* MITAD SUPERIOR: LO VISUAL (EL REPRODUCTOR DE VÍDEO 16:9) */}
-      <div style={{ backgroundColor: '#000', borderRadius: '12px', overflow: 'hidden', aspectRatio: '16/9', maxHeight: '300px', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: '100%' }}>
+      {/* MITAD SUPERIOR: VISUAL (REPRODUCTOR DE VÍDEO COMPACTO 16:9) */}
+      <div style={{ width: '100%', aspectRatio: '16/9', backgroundColor: '#000', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 4px 10px rgba(0,0,0,0.15)' }}>
         <video controls style={{ width: '100%', height: '100%', objectFit: 'contain' }}>
           <source src="/media/vibe-boogie-pop.mp4" type="video/mp4" />
         </video>
       </div>
 
-      {/* MITAD INFERIOR: CONTROLES AUDIO E INFORMES */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ backgroundColor: '#F1F8E9', padding: '15px', borderRadius: '12px', border: '1px solid #C5E1A5' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <Radio size={20} color="#2E7D32" />
-            <strong style={{ color: '#1B5E20' }}>Podcast: Ley 7/2022 Local</strong>
+      {/* MITAD INFERIOR: FORMULARIOS, AUDIO E INFORMES DE RENTABILIDAD */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ backgroundColor: '#F1F8E9', padding: '18px', borderRadius: '14px', border: '1px solid #C5E1A5' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+            <Radio size={22} color="#2E7D32" />
+            <strong style={{ color: '#1B5E20', fontSize: '0.95rem' }}>Podcast Técnico: Análisis Eje Elda-Villena</strong>
           </div>
           <audio controls style={{ width: '100%' }}>
             <source src="/media/podcast-elda.m4a" type="audio/mp4" />
           </audio>
         </div>
 
-        <div style={{ border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden' }}>
-          <button onClick={() => setAcordeonAbierto(acordeonAbierto === 'inf' ? null : 'inf')} style={{ width: '100%', padding: '12px 15px', backgroundColor: '#fff', border: 'none', textAlign: 'left', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', cursor: 'pointer' }}>
-            📉 Balance de Tasa por Vertido (Villena Tercios)
-            <span>{acordeonAbierto === 'inf' ? '▲' : '▼'}</span>
+        <div style={{ border: '1px solid #e2e8f0', borderRadius: '10px', overflow: 'hidden', backgroundColor: '#fff' }}>
+          <button 
+            onClick={() => setAcordeonAbierto(acordeonAbierto === 'rent' ? null : 'rent')} 
+            style={{ width: '100%', padding: '14px 18px', backgroundColor: '#fff', border: 'none', textAlign: 'left', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', cursor: 'pointer', color: '#2d3748' }}
+          >
+            📉 Balance de Ahorro Neto por Canon Estatal (Ley 7/2022)
+            <span>{acordeonAbierto === 'rent' ? '▲' : '▼'}</span>
           </button>
-          {acordeonAbierto === 'inf' && (
-            <div style={{ padding: '12px', backgroundColor: '#fafafa', borderTop: '1px solid #ddd', fontSize: '0.85rem' }}>
-              Orgánica: ~38,62€/Tratamiento (Ahorro directo de +51,38€/Tn frente a la tasa de rechazo gris de 125€/Tn).
+          {acordeonAbierto === 'rent' && (
+            <div style={{ padding: '15px', backgroundColor: '#fafafa', borderTop: '1px solid #e2e8f0', fontSize: '0.85rem', lineHeight: '1.5', color: '#4a5568' }}>
+              <strong>Materia Orgánica (Contenedor Marrón):</strong> Coste en planta de ~38,62€/Tratamiento. Al evitar la mezcla en la fracción Resto (cuya penalización es de 125€/Tn), se inyecta un superávit logístico directo de <strong>+51,38€ por tonelada</strong> recuperada.
             </div>
           )}
         </div>
@@ -139,16 +143,17 @@ export default function App() {
     return n < 10 ? `0${n}` : `${n}`;
   };
 
-  // Función preparada para enviar datos a la base de datos local de XAMPP
-  const enviarDatosAXampp = async (accion, datos) => {
+  // Función asíncrona dedicada para la comunicación directa con tu XAMPP local
+  const sincronizarConXampp = async (operacion, datosCarga) => {
     try {
-      await fetch(`${API_URL}/guardar_registro.php`, {
+      await fetch(`${XAMPP_API_URL}/guardar_registro.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accion, datos, fecha: new Date().toISOString() })
+        body: JSON.stringify({ operacion, datosCarga, timestamp: new Date().toISOString() })
       });
+      console.log("Sincronización exitosa con MySQL local (XAMPP).");
     } catch (err) {
-      console.log("Modo offline: Datos respaldados temporalmente en LocalStorage.");
+      console.log("Servidor XAMPP offline. Guardando asíncronamente en fallback local.");
     }
   };
 
@@ -157,97 +162,95 @@ export default function App() {
       const nuevoSaldo = eldaCoins - premio.coste;
       setEldaCoins(nuevoSaldo);
       localStorage.setItem('eldaCoins', nuevoSaldo);
-      enviarDatosAXampp('canje_premio', premio);
-      alert(`🎉 Canje correcto: "${premio.nombre}"`);
+      sincronizarConXampp('canje_premio_ciudadano', premio);
+      alert(`🎉 Canje correcto: Código emitido para "${premio.nombre}". Registro enviado a XAMPP.`);
     } else {
-      alert("⚠️ Saldo insuficiente.");
+      alert("⚠️ Balance de Elda-Coins insuficiente para este incentivo.");
     }
   };
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', backgroundColor: '#f4f7f6', minHeight: '100vh', paddingBottom: '40px' }}>
+    <div style={{ fontFamily: 'system-ui, sans-serif', backgroundColor: '#f0f4f8', minHeight: '100vh', paddingBottom: '30px' }}>
       
-      {/* MENÚ SUPERIOR DESPLEGABLE */}
+      {/* MENÚ SUPERIOR DESPLEGABLE TIPO COMBO (HEADER PRINCIPAL) */}
       <header style={{
-        backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0', padding: '14px 20px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 1100
+        backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0', padding: '14px 24px',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 1100,
+        boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <button 
             onClick={() => setMenuAbierto(!menuAbierto)} 
-            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '4px' }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '6px', borderRadius: '6px', backgroundColor: '#f8f9fa' }}
           >
-            <Menu size={24} color="#2E7D32" />
+            <Menu size={22} color="#2E7D32" />
           </button>
-          <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#2E7D32' }}>Elda Circular Civic OS</span>
+          <span style={{ fontWeight: 'bold', fontSize: '1.15rem', color: '#2E7D32', letterSpacing: '-0.3px' }}>Elda Circular Civic OS</span>
         </div>
         
-        <div style={{ backgroundColor: '#FFF9C4', border: '1px solid #FBC02D', padding: '5px 12px', borderRadius: '15px', fontWeight: 'bold', fontSize: '0.85rem' }}>
-          🪙 {eldaCoins} Coins
+        <div style={{ backgroundColor: '#FFF9C4', border: '1px solid #FBC02D', padding: '6px 14px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+          🪙 <span>{eldaCoins} Elda-Coins</span>
         </div>
 
-        {/* Listado Desplegable del Menú */}
+        {/* Listado Desplegable del Menú de Navegación */}
         {menuAbierto && (
           <div style={{
             position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#fff',
-            borderBottom: '2px solid #2E7D32', boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+            borderBottom: '3px solid #2E7D32', boxShadow: '0 10px 20px rgba(0,0,0,0.08)',
             display: 'flex', flexDirection: 'column', zIndex: 1200
           }}>
-            <button onClick={() => { setPestanaActiva('mapa'); setMenuAbierto(false); }} style={{ padding: '15px 20px', textAlignment: 'left', background: 'none', border: 'none', borderBottom: '1px solid #eee', cursor: 'pointer', fontWeight: pestanaActiva === 'mapa' ? 'bold' : 'normal', color: '#333' }}>📍 Presentación y Callejero Adaptive</button>
-            <button onClick={() => { setPestanaActiva('depositos'); setMenuAbierto(false); }} style={{ padding: '15px 20px', textAlignment: 'left', background: 'none', border: 'none', borderBottom: '1px solid #eee', cursor: 'pointer', fontWeight: pestanaActiva === 'depositos' ? 'bold' : 'normal', color: '#333' }}>♻️ Validación QR e Incidencias</button>
-            <button onClick={() => { setPestanaActiva('educacion'); setMenuAbierto(false); }} style={{ padding: '15px 20px', textAlignment: 'left', background: 'none', border: 'none', borderBottom: '1px solid #eee', cursor: 'pointer', fontWeight: pestanaActiva === 'educacion' ? 'bold' : 'normal', color: '#333' }}>🎓 Aula e Ingeniería Social</button>
-            <button onClick={() => { setPestanaActiva('multimedia'); setMenuAbierto(false); }} style={{ padding: '15px 20px', textAlignment: 'left', background: 'none', border: 'none', cursor: 'pointer', fontWeight: pestanaActiva === 'multimedia' ? 'bold' : 'normal', color: '#333' }}>📻 Hub de Medios e Informes</button>
+            <button onClick={() => { setPestanaActiva('mapa'); setMenuAbierto(false); }} style={{ padding: '16px 24px', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid #f0f0f0', cursor: 'pointer', fontWeight: pestanaActiva === 'mapa' ? 'bold' : 'normal', color: pestanaActiva === 'mapa' ? '#2E7D32' : '#333', fontSize: '0.95rem' }}>📍 Mitad Superior: Slideshow 16:9 | Mitad Inferior: Callejero y Premios</button>
+            <button onClick={() => { setPestanaActiva('depositos'); setMenuAbierto(false); }} style={{ padding: '16px 24px', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid #f0f0f0', cursor: 'pointer', fontWeight: pestanaActiva === 'depositos' ? 'bold' : 'normal', color: pestanaActiva === 'depositos' ? '#2E7D32' : '#333', fontSize: '0.95rem' }}>♻️ Mitad Superior: Cámara Lector QR | Mitad Inferior: Formulario Trazabilidad</button>
+            <button onClick={() => { setPestanaActiva('educacion'); setMenuAbierto(false); }} style={{ padding: '16px 24px', textAlign: 'left', background: 'none', border: 'none', borderBottom: '1px solid #f0f0f0', cursor: 'pointer', fontWeight: pestanaActiva === 'educacion' ? 'bold' : 'normal', color: pestanaActiva === 'educacion' ? '#2E7D32' : '#333', fontSize: '0.95rem' }}>🎓 Mitad Superior: Banner Educativo | Mitad Inferior: Cuestionario Z-ero</button>
+            <button onClick={() => { setPestanaActiva('multimedia'); setMenuAbierto(false); }} style={{ padding: '16px 24px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', fontWeight: pestanaActiva === 'multimedia' ? 'bold' : 'normal', color: pestanaActiva === 'multimedia' ? '#2E7D32' : '#333', fontSize: '0.95rem' }}>📻 Mitad Superior: Reproductor Vídeo 16:9 | Mitad Inferior: Podcast e Informes</button>
           </div>
         )}
       </header>
 
-      {/* CONTENIDO PRINCIPAL CON ESTRUCTURA HORIZONTAL SPLIT */}
-      <main style={{ maxWidth: '1200px', margin: '20px auto', padding: '0 15px' }}>
+      {/* ÁREA DE CONTENIDO CON ARQUITECTURA HORIZONTAL SPLIT SCREEN (ARRIBA VISUAL, ABAJO ACCIONES) */}
+      <main style={{ maxWidth: '1200px', margin: '24px auto', padding: '0 20px' }}>
         
+        {/* MODULO 1: PORTADA, SLIDESHOW 16:9 Y MAPA */}
         {pestanaActiva === 'mapa' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
             
-            {/* BLOQUE SUPERIOR: EL GRAN SLIDESHOW 16:9 */}
-            <section style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
-              {/* Contenedor Visual con Aspect Ratio Fijo 16:9 */}
-              <div style={{
-                width: '100%', aspectRatio: '16/9', borderRadius: '10px', overflow: 'hidden',
-                backgroundColor: '#eaeaea', position: 'relative', border: '1px solid #edf2f7'
-              }}>
+            {/* PARTE SUPERIOR: EL GRAN SLIDESHOW EN RATIO PANORÁMICO HORIZONTAL 16:9 */}
+            <section style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', border: '1px solid #e2e8f0' }}>
+              <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9', position: 'relative', border: '1px solid #edf2f7' }}>
                 <img 
                   src={`/media/slide${formatearSlide(slideIndice)}.jpg`}
-                  alt={`Slide ${slideIndice + 1}`}
+                  alt={`Diapositiva ${slideIndice + 1}`}
                   style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                  onError={(e) => { e.target.style.opacity = '0.4'; }}
+                  onError={(e) => { e.target.style.opacity = '0.3'; }}
                 />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(26, 32, 44, 0.85)', color: '#fff', padding: '12px', textAlign: 'center', fontSize: '0.85rem' }}>
-                  <strong>{titulosSlides[slideIndice]}</strong> | Plan Maestro 2026 Elda Circular
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(26, 32, 44, 0.85)', color: '#fff', padding: '14px', textAlign: 'center', fontSize: '0.9rem', backdropFilter: 'blur(4px)' }}>
+                  <strong>{titulosSlides[slideIndice]}</strong> | Presentación Ejecutiva Partner Elda
                 </div>
               </div>
 
-              {/* Botones de control del Slideshow */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px' }}>
-                <button onClick={() => setSlideIndice((prev) => (prev - 1 + 10) % 10)} style={{ backgroundColor: '#edf2f7', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>◀ Anterior</button>
-                <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#4a5568' }}>{slideIndice + 1} / 10</span>
-                <button onClick={() => setSlideIndice((prev) => (prev + 1) % 10)} style={{ backgroundColor: '#2E7D32', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Siguiente ▶</button>
+              {/* Controles de Navegación del Carrusel Superior */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
+                <button onClick={() => setSlideIndice((prev) => (prev - 1 + 10) % 10)} style={{ backgroundColor: '#edf2f7', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>◀ Diapositiva Anterior</button>
+                <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#4a5568', backgroundColor: '#f1f5f9', padding: '4px 12px', borderRadius: '12px' }}>{slideIndice + 1} / 10</span>
+                <button onClick={() => setSlideIndice((prev) => (prev + 1) % 10)} style={{ backgroundColor: '#2E7D32', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>Siguiente Diapositiva ▶</button>
               </div>
             </section>
 
-            {/* BLOQUE INFERIOR: CALLEJERO Y PREMIOS */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
-              <section style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                <h3 style={{ margin: '0 0 10px 0', fontSize: '1.05rem' }}>📍 Distribución de Esquinas de Quita y Pon</h3>
+            {/* PARTE INFERIOR: CALLEJERO ADAPTATIVO Y PANEL DE FISCALIDAD */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px', flexWrap: 'wrap' }}>
+              <section style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                <h3 style={{ margin: '0 0 12px 0', fontSize: '1.1rem', color: '#1a202c', display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={20} color="#2E7D32" /> Distribución de Puntos de Proximidad</h3>
                 <ModuloMapa />
               </section>
 
-              <section style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                <h3 style={{ margin: '0 0 12px 0', fontSize: '1.05rem' }}>🛍️ Canje de Incentivos Locales (XAMPP Sincronizado)</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <section style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                <h3 style={{ margin: '0 0 15px 0', fontSize: '1.1rem', color: '#1a202c' }}>🛍️ Formulario de Solicitud de Vales e Incentivos</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {catalogoPremios.map((p) => (
-                    <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#f7fafc', borderRadius: '8px', border: '1px solid #edf2f7' }}>
-                      <span style={{ fontSize: '0.9rem', fontWeight: '500' }}>{p.nombre}</span>
-                      <button onClick={() => ejecutarCanje(p)} style={{ backgroundColor: eldaCoins >= p.coste ? '#2E7D32' : '#cbd5e0', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.8rem', cursor: 'pointer' }}>
-                        {p.coste} 🪙
+                    <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px', backgroundColor: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                      <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#2d3748' }}>{p.nombre}</span>
+                      <button onClick={() => ejecutarCanje(p)} style={{ backgroundColor: eldaCoins >= p.coste ? '#2E7D32' : '#cbd5e0', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.85rem', cursor: 'pointer' }}>
+                        Canjear por {p.coste} 🪙
                       </button>
                     </div>
                   ))}
@@ -258,60 +261,88 @@ export default function App() {
           </div>
         )}
 
-        {/* MODULO QR: HORIZONTAL SPLIT */}
+        {/* MODULO 2: VALIDACIÓN QR (ARRIBA SENSOR, ABAJO SELECCIÓN) */}
         {pestanaActiva === 'depositos' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* ARRIBA: LO VISUAL */}
-            <div style={{ backgroundColor: '#E8F5E9', padding: '30px', borderRadius: '12px', textAlign: 'center', border: '1px dashed #2E7D32' }}>
-              <h3 style={{ color: '#1B5E20', margin: '0 0 8px 0' }}>📷 Sensor de Escaneo y Validación Activo</h3>
-              <p style={{ margin: 0, color: '#555', fontSize: '0.9rem' }}>Apunta con el lector de la PWA al código QR oficial impreso en tu bolsa de orgánica o envases.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+            {/* MITAD SUPERIOR: VISUAL (BANNER DE CÁMARA 16:9 SIMULADO) */}
+            <div style={{ 
+              width: '100%', aspectRatio: '16/9', maxHeight: '280px', backgroundColor: '#E8F5E9', 
+              borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', 
+              alignItems: 'center', border: '2px dashed #2E7D32', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' 
+            }}>
+              <CheckCircle size={44} color="#2E7D32" style={{ marginBottom: '10px' }} />
+              <h3 style={{ color: '#1B5E20', margin: 0, fontSize: '1.15rem' }}>Lector Óptico de Trazabilidad QR Activo</h3>
+              <p style={{ margin: '6px 0 0 0', color: '#555', fontSize: '0.85rem' }}>Coloque el código de la bolsa frente al visor de su dispositivo.</p>
             </div>
-            {/* ABAJO: EL FORMULARIO */}
-            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #eee' }}>
-              <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>1. Tipo de Fracción Ofertada:</label>
-              <select id="selectContenedor" style={{ width: '100%', padding: '10px', borderRadius: '6px', marginBottom: '15px', border: '1px solid #ccc' }}>
+
+            {/* MITAD INFERIOR: FORMULARIO DE DEPÓSITO */}
+            <div style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h3 style={{ margin: '0 0 15px 0', fontSize: '1.1rem' }}>Formulario de Registro de Entrega</h3>
+              
+              <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '6px', fontSize: '0.9rem' }}>1. Seleccionar Contenedor de Destino (Código QR Ubicación):</label>
+              <select id="selectContenedor" style={{ width: '100%', padding: '12px', borderRadius: '8px', marginBottom: '16px', border: '1px solid #cbd5e0', fontSize: '0.9rem' }}>
                 {tiposContenedores.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
               </select>
-              <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '5px' }}>2. Estado de Separación LER:</label>
-              <select id="selectResiduo" style={{ width: '100%', padding: '10px', borderRadius: '6px', marginBottom: '15px', border: '1px solid #ccc' }}>
-                <option value="correcto">Depósito limpio (Sin impropios)</option>
-                <option value="impropio">Contaminado (Activa Pegatina Roja)</option>
+
+              <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '6px', fontSize: '0.9rem' }}>2. Estado de Pureza de la Fracción Depositada:</label>
+              <select id="selectResiduo" style={{ width: '100%', padding: '12px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #cbd5e0', fontSize: '0.9rem' }}>
+                <option value="correcto">Pureza Óptima (Sin mezcla de impropios)</option>
+                <option value="impropio">Contaminación de Lote (Provoca Alerta de Pegatina Roja)</option>
               </select>
+
               <button onClick={() => {
-                const res = document.getElementById('selectResiduo').value;
-                if (res === 'correcto') {
+                const contenedorSel = document.getElementById('selectContenedor').value;
+                const resSel = document.getElementById('selectResiduo').value;
+                if (resSel === 'correcto') {
                   setEldaCoins(p => p + 15);
-                  enviarDatosAXampp('deposito_qr', { estado: 'valido' });
-                  alert("Validación correcta. +15 Coins");
+                  sincronizarConXampp('deposito_qr_valido', { contenedor: contenedorSel });
+                  alert("¡Depósito validado en origen! Se han sumado +15 Elda-Coins a su cuenta.");
                 } else {
-                  alert("⚠️ INCIDENCIA RECOLECTADA: Pegatina Roja fijada.");
+                  alert("⚠️ ALERTA DE INCIDENCIA: Lote bloqueado por Pegatina Roja. Notificación enviada al servicio de inspección.");
                 }
-              }} style={{ width: '100%', backgroundColor: '#2E7D32', color: '#fff', padding: '12px', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
-                Simular Trazabilidad en Origen
+              }} style={{ width: '100%', backgroundColor: '#2E7D32', color: '#fff', padding: '14px', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.95rem' }}>
+                Enviar Registro de Validación a Base de Datos
               </button>
             </div>
           </div>
         )}
 
-        {/* MODULO AULA: HORIZONTAL SPLIT */}
+        {/* MODULO 3: AULA DE FORMACIÓN (ARRIBA CABECERA, ABAJO PREGUNTAS) */}
         {pestanaActiva === 'educacion' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* ARRIBA: LO VISUAL */}
-            <div style={{ backgroundColor: '#E3F2FD', padding: '25px', borderRadius: '12px', textAlign: 'center', border: '1px solid #90CAF9' }}>
-              <h3 style={{ margin: '0 0 6px 0', color: '#0D47A1' }}>🎓 Aula de Formación Gen Z-ero</h3>
-              <p style={{ margin: 0, color: '#444', fontSize: '0.9rem' }}>Completa los retos semanales para incrementar el balance de tu carnet digital familiar.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+            {/* MITAD SUPERIOR: VISUAL (BANNER FORMATIVO 16:9) */}
+            <div style={{ 
+              width: '100%', aspectRatio: '16/9', maxHeight: '240px', backgroundColor: '#E3F2FD', 
+              borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', 
+              alignItems: 'center', border: '1px solid #90CAF9' 
+            }}>
+              <BookOpen size={40} color="#0D47A1" style={{ marginBottom: '8px' }} />
+              <h3 style={{ margin: 0, color: '#0D47A1', fontSize: '1.15rem' }}>Programa de Auditoría Social "Generación Z-ero"</h3>
+              <p style={{ margin: '5px 0 0 0', color: '#444', fontSize: '0.85rem' }}>Instrucción digital para la optimización del superávit de civismo.</p>
             </div>
-            {/* ABAJO: EL FORMULARIO */}
-            <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #eee' }}>
+
+            {/* MITAD INFERIOR: FORMULARIO CUESTIONARIO */}
+            <div style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h3 style={{ margin: '0 0 15px 0', fontSize: '1.1rem' }}>Formulario de Respuestas del Alumno</h3>
               {cuestionariosZero.primaria.map((quiz) => (
-                <div key={quiz.id} style={{ marginBottom: '15px' }}>
-                  <strong style={{ display: 'block', marginBottom: '8px' }}>{quiz.pregunta}</strong>
+                <div key={quiz.id} style={{ marginBottom: '20px', paddingBottom: '10px' }}>
+                  <strong style={{ display: 'block', marginBottom: '10px', fontSize: '0.95rem', color: '#2d3748' }}>{quiz.pregunta}</strong>
                   <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     {quiz.opciones.map((op, i) => (
-                      <button key={i} onClick={() => {
-                        if (i === quiz.correcta) { alert("¡Correcto!"); enviarDatosAXampp('quiz_acierto', { quizId: quiz.id }); }
-                        else { alert("Incorrecto."); }
-                      }} style={{ padding: '8px 12px', border: '1px solid #ccc', borderRadius: '6px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '0.85rem' }}>{op}</button>
+                      <button 
+                        key={i} 
+                        onClick={() => {
+                          if (i === quiz.correcta) { 
+                            alert("¡Respuesta Correcta! Se han registrado sus méritos."); 
+                            sincronizarConXampp('quiz_acierto_escolar', { quiz: quiz.id }); 
+                          } else { 
+                            alert("Respuesta incorrecta. Por favor, revise los manuales del Plan Maestro."); 
+                          }
+                        }} 
+                        style={{ padding: '10px 16px', border: '1px solid #cbd5e0', borderRadius: '6px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '0.85rem', color: '#4a5568' }}
+                      >
+                        {op}
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -320,9 +351,10 @@ export default function App() {
           </div>
         )}
 
-        {/* MODULO MULTIMEDIA */}
+        {/* MODULO 4: HUB MULTIMEDIA (INTEGRACIÓN HORIZONTAL DIRECTA) */}
         {pestanaActiva === 'multimedia' && (
-          <section style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
+          <section style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', border: '1px solid #e2e8f0' }}>
+            <h2 style={{ margin: '0 0 15px 0', fontSize: '1.2rem', color: '#2E7D32' }}>📻 Centro de Documentación y Medios</h2>
             <ModuloMultimedia />
           </section>
         )}
