@@ -55,7 +55,7 @@ function ModuloMapa() {
             </button>
           ))}
         </div>
-        <div style={{ marginTop: '15px', paddingUp: '15px', borderTop: '1px solid #f0f4f8', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.9rem', color: '#4a5568' }}>
+        <div style={{ marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #f0f4f8', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.9rem', color: '#4a5568' }}>
           <p style={{ margin: 0 }}><strong>Ubicación Completa:</strong> {datosEsquina.nombre}</p>
           <p style={{ margin: 0 }}><strong>Horario Operativo:</strong> {datosEsquina.horario}</p>
           <p style={{ margin: 0 }}><strong>Estado del Sensor:</strong> <span style={{ color: '#2E7D32', fontWeight: 'bold' }}>{datosEsquina.estado}</span></p>
@@ -138,12 +138,12 @@ export default function App() {
     { id: 'tasa', nombre: 'Descuento 20€ Tasa Basura', coste: 150, icono: Percent }
   ];
 
+  // CORRECCIÓN MAESTRA: Añade el cero a la izquierda de forma exacta y limpia (01, 02, etc.)
   const formatearSlide = (idx) => {
-    const n = idx + 1;
-    return n < 10 ? `0${n}` : `${n}`;
+    const numReal = idx + 1;
+    return numReal < 10 ? `0${numReal}` : `${numReal}`;
   };
 
-  // Función asíncrona dedicada para la comunicación directa con tu XAMPP local
   const sincronizarConXampp = async (operacion, datosCarga) => {
     try {
       await fetch(`${XAMPP_API_URL}/guardar_registro.php`, {
@@ -151,9 +151,8 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ operacion, datosCarga, timestamp: new Date().toISOString() })
       });
-      console.log("Sincronización exitosa con MySQL local (XAMPP).");
     } catch (err) {
-      console.log("Servidor XAMPP offline. Guardando asíncronamente en fallback local.");
+      console.log("Servidor XAMPP offline. Guardando asíncronamente en LocalStorage.");
     }
   };
 
@@ -163,7 +162,7 @@ export default function App() {
       setEldaCoins(nuevoSaldo);
       localStorage.setItem('eldaCoins', nuevoSaldo);
       sincronizarConXampp('canje_premio_ciudadano', premio);
-      alert(`🎉 Canje correcto: Código emitido para "${premio.nombre}". Registro enviado a XAMPP.`);
+      alert(`🎉 Canje correcto: Código emitido para "${premio.nombre}".`);
     } else {
       alert("⚠️ Balance de Elda-Coins insuficiente para este incentivo.");
     }
@@ -172,7 +171,7 @@ export default function App() {
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', backgroundColor: '#f0f4f8', minHeight: '100vh', paddingBottom: '30px' }}>
       
-      {/* MENÚ SUPERIOR DESPLEGABLE TIPO COMBO (HEADER PRINCIPAL) */}
+      {/* MENÚ SUPERIOR DESPLEGABLE TIPO COMBO */}
       <header style={{
         backgroundColor: '#fff', borderBottom: '1px solid #e2e8f0', padding: '14px 24px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, zIndex: 1100,
@@ -188,11 +187,11 @@ export default function App() {
           <span style={{ fontWeight: 'bold', fontSize: '1.15rem', color: '#2E7D32', letterSpacing: '-0.3px' }}>Elda Circular Civic OS</span>
         </div>
         
-        <div style={{ backgroundColor: '#FFF9C4', border: '1px solid #FBC02D', padding: '6px 14px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-          🪙 <span>{eldaCoins} Elda-Coins</span>
+        <div style={{ backgroundColor: '#FFF9C4', border: '1px solid #FBC02D', padding: '6px 14px', borderRadius: '20px', fontWeight: 'bold', fontSize: '0.85rem' }}>
+          🪙 {eldaCoins} Elda-Coins
         </div>
 
-        {/* Listado Desplegable del Menú de Navegación */}
+        {/* Desplegable Combo */}
         {menuAbierto && (
           <div style={{
             position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: '#fff',
@@ -207,28 +206,26 @@ export default function App() {
         )}
       </header>
 
-      {/* ÁREA DE CONTENIDO CON ARQUITECTURA HORIZONTAL SPLIT SCREEN (ARRIBA VISUAL, ABAJO ACCIONES) */}
+      {/* ÁREA DE CONTENIDO CONFIGURADA EN HORIZONTAL SPLIT SCREEN */}
       <main style={{ maxWidth: '1200px', margin: '24px auto', padding: '0 20px' }}>
         
-        {/* MODULO 1: PORTADA, SLIDESHOW 16:9 Y MAPA */}
         {pestanaActiva === 'mapa' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
             
-            {/* PARTE SUPERIOR: EL GRAN SLIDESHOW EN RATIO PANORÁMICO HORIZONTAL 16:9 */}
+            {/* PARTE SUPERIOR: EL GRAN SLIDESHOW EN RATIO PANORÁMICO HORIZONTAL 16:9 (CORREGIDO A .png) */}
             <section style={{ backgroundColor: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', border: '1px solid #e2e8f0' }}>
               <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9', position: 'relative', border: '1px solid #edf2f7' }}>
                 <img 
-                  src={`/media/slide${formatearSlide(slideIndice)}.jpg`}
+                  src={`/media/slide${formatearSlide(slideIndice)}.png`}
                   alt={`Diapositiva ${slideIndice + 1}`}
                   style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
-                  onError={(e) => { e.target.style.opacity = '0.3'; }}
                 />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(26, 32, 44, 0.85)', color: '#fff', padding: '14px', textAlign: 'center', fontSize: '0.9rem', backdropFilter: 'blur(4px)' }}>
                   <strong>{titulosSlides[slideIndice]}</strong> | Presentación Ejecutiva Partner Elda
                 </div>
               </div>
 
-              {/* Controles de Navegación del Carrusel Superior */}
+              {/* Controles del Carrusel */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
                 <button onClick={() => setSlideIndice((prev) => (prev - 1 + 10) % 10)} style={{ backgroundColor: '#edf2f7', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>◀ Diapositiva Anterior</button>
                 <span style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#4a5568', backgroundColor: '#f1f5f9', padding: '4px 12px', borderRadius: '12px' }}>{slideIndice + 1} / 10</span>
@@ -261,24 +258,21 @@ export default function App() {
           </div>
         )}
 
-        {/* MODULO 2: VALIDACIÓN QR (ARRIBA SENSOR, ABAJO SELECCIÓN) */}
+        {/* MODULO 2: VALIDACIÓN QR */}
         {pestanaActiva === 'depositos' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-            {/* MITAD SUPERIOR: VISUAL (BANNER DE CÁMARA 16:9 SIMULADO) */}
             <div style={{ 
               width: '100%', aspectRatio: '16/9', maxHeight: '280px', backgroundColor: '#E8F5E9', 
               borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', 
-              alignItems: 'center', border: '2px dashed #2E7D32', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' 
+              alignItems: 'center', border: '2px dashed #2E7D32' 
             }}>
               <CheckCircle size={44} color="#2E7D32" style={{ marginBottom: '10px' }} />
               <h3 style={{ color: '#1B5E20', margin: 0, fontSize: '1.15rem' }}>Lector Óptico de Trazabilidad QR Activo</h3>
               <p style={{ margin: '6px 0 0 0', color: '#555', fontSize: '0.85rem' }}>Coloque el código de la bolsa frente al visor de su dispositivo.</p>
             </div>
 
-            {/* MITAD INFERIOR: FORMULARIO DE DEPÓSITO */}
             <div style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '1.1rem' }}>Formulario de Registro de Entrega</h3>
-              
               <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '6px', fontSize: '0.9rem' }}>1. Seleccionar Contenedor de Destino (Código QR Ubicación):</label>
               <select id="selectContenedor" style={{ width: '100%', padding: '12px', borderRadius: '8px', marginBottom: '16px', border: '1px solid #cbd5e0', fontSize: '0.9rem' }}>
                 {tiposContenedores.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
@@ -296,9 +290,9 @@ export default function App() {
                 if (resSel === 'correcto') {
                   setEldaCoins(p => p + 15);
                   sincronizarConXampp('deposito_qr_valido', { contenedor: contenedorSel });
-                  alert("¡Depósito validado en origen! Se han sumado +15 Elda-Coins a su cuenta.");
+                  alert("¡Depósito validado en origen! Se han sumado +15 Elda-Coins.");
                 } else {
-                  alert("⚠️ ALERTA DE INCIDENCIA: Lote bloqueado por Pegatina Roja. Notificación enviada al servicio de inspección.");
+                  alert("⚠️ ALERTA DE INCIDENCIA: Lote bloqueado por Pegatina Roja.");
                 }
               }} style={{ width: '100%', backgroundColor: '#2E7D32', color: '#fff', padding: '14px', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.95rem' }}>
                 Enviar Registro de Validación a Base de Datos
@@ -307,10 +301,9 @@ export default function App() {
           </div>
         )}
 
-        {/* MODULO 3: AULA DE FORMACIÓN (ARRIBA CABECERA, ABAJO PREGUNTAS) */}
+        {/* MODULO 3: AULA DE FORMACIÓN */}
         {pestanaActiva === 'educacion' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-            {/* MITAD SUPERIOR: VISUAL (BANNER FORMATIVO 16:9) */}
             <div style={{ 
               width: '100%', aspectRatio: '16/9', maxHeight: '240px', backgroundColor: '#E3F2FD', 
               borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', 
@@ -321,7 +314,6 @@ export default function App() {
               <p style={{ margin: '5px 0 0 0', color: '#444', fontSize: '0.85rem' }}>Instrucción digital para la optimización del superávit de civismo.</p>
             </div>
 
-            {/* MITAD INFERIOR: FORMULARIO CUESTIONARIO */}
             <div style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
               <h3 style={{ margin: '0 0 15px 0', fontSize: '1.1rem' }}>Formulario de Respuestas del Alumno</h3>
               {cuestionariosZero.primaria.map((quiz) => (
@@ -333,13 +325,13 @@ export default function App() {
                         key={i} 
                         onClick={() => {
                           if (i === quiz.correcta) { 
-                            alert("¡Respuesta Correcta! Se han registrado sus méritos."); 
+                            alert("¡Respuesta Correcta!"); 
                             sincronizarConXampp('quiz_acierto_escolar', { quiz: quiz.id }); 
                           } else { 
-                            alert("Respuesta incorrecta. Por favor, revise los manuales del Plan Maestro."); 
+                            alert("Respuesta incorrecta."); 
                           }
                         }} 
-                        style={{ padding: '10px 16px', border: '1px solid #cbd5e0', borderRadius: '6px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '0.85rem', color: '#4a5568' }}
+                        style={{ padding: '10px 16px', border: '1px solid #cbd5e0', borderRadius: '6px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '0.85rem' }}
                       >
                         {op}
                       </button>
@@ -351,9 +343,9 @@ export default function App() {
           </div>
         )}
 
-        {/* MODULO 4: HUB MULTIMEDIA (INTEGRACIÓN HORIZONTAL DIRECTA) */}
+        {/* MODULO 4: HUB MULTIMEDIA */}
         {pestanaActiva === 'multimedia' && (
-          <section style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)', border: '1px solid #e2e8f0' }}>
+          <section style={{ backgroundColor: '#fff', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
             <h2 style={{ margin: '0 0 15px 0', fontSize: '1.2rem', color: '#2E7D32' }}>📻 Centro de Documentación y Medios</h2>
             <ModuloMultimedia />
           </section>
