@@ -129,6 +129,24 @@ function ModuloCalendario() {
 // =================================================================
 function ModuloMultimedia() {
   const [acordeonAbierto, setAcordeonAbierto] = useState(null);
+  
+  // Estado para controlar las diapositivas (Slides) de la estrategia
+  const [diapositivaActual, setDiapositivaActual] = useState(0);
+
+  const datosDiapositivas = [
+    { title: "Diapositiva 1: Marco Estratégico", desc: "Alineación con la Ley 7/2022 y el PIRCV. Evitar el riesgo fiscal reduciendo el vertido mezclado en Villena." },
+    { title: "Diapositiva 2: Modelo Quita y Pon", desc: "Logística adaptativa para centros urbanos peatonalizados. Liberación del espacio público diurno sin olores." },
+    { title: "Diapositiva 3: Trazabilidad Activa", desc: "Validación por códigos QR vinculados al catastro y uso de la Pegatina Roja como feedback educativo inmediato." },
+    { title: "Diapositiva 4: Retorno Económico", desc: "Conversión del civismo en ahorro real: ~90€ evitados por tonelada, inyectados en Elda-Coins para el comercio local." }
+  ];
+
+  const siguienteSlide = () => {
+    setDiapositivaActual((prev) => (prev + 1) % datosDiapositivas.length);
+  };
+
+  const anteriorSlide = () => {
+    setDiapositivaActual((prev) => (prev - 1 + datosDiapositivas.length) % datosDiapositivas.length);
+  };
 
   const toggleAcordeon = (id) => {
     setAcordeonAbierto(acordeonAbierto === id ? null : id);
@@ -143,7 +161,7 @@ function ModuloMultimedia() {
           <Radio size={24} color="#2E7D32" />
           <h3 style={{ margin: 0, color: '#1B5E20', fontSize: '1.15rem' }}>Audio: La Revolución del Ahorro Local</h3>
         </div>
-        <p style={{ margin: 0, color: '#555', fontSize: '0.9rem' }}>
+        <p style={{ margin: 0, color: '#555', fontSize: '0.9&rem' }}>
           Análisis profundo sobre el impacto del canon de la Ley 7/2022 y el balance de costes en el eje logístico Elda-Villena.
         </p>
         <audio controls style={{ width: '100%', marginTop: '5px' }}>
@@ -167,44 +185,54 @@ function ModuloMultimedia() {
         </video>
       </div>
 
-      {/* SECCIÓN DOCUMENTOS Y CONTENEDORES DE EDIFICIO */}
-      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', border: '1px solid #eee', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <h3 style={{ margin: 0, color: '#333', fontSize: '1.15rem', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-          📂 Presentaciones y Modelos Técnicos
-        </h3>
-
-        {/* Descarga del PDF de Estrategia */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '6px', border: '1px solid #eee' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FileDown size={22} color="#2E7D32" />
-            <div>
-              <strong style={{ display: 'block', color: '#333', fontSize: '0.95rem' }}>Elda_Circular_Strategy.pdf</strong>
-              <span style={{ fontSize: '0.8rem', color: '#666' }}>Diapositivas y ruta del plan de gestión municipal.</span>
-            </div>
-          </div>
-          <a 
-            href="/media/Elda_Circular_Strategy.pdf" 
-            download
-            style={{ backgroundColor: '#2E7D32', color: '#fff', textDecoration: 'none', padding: '8px 12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '0.8rem' }}
-          >
-            Descargar
-          </a>
+      {/* NUEVO DISEÑO: PRESENTACIÓN INTERACTIVA (SLIDES MAESTROS) */}
+      <div style={{ backgroundColor: '#FFF3E0', padding: '20px', borderRadius: '10px', border: '1px solid #FFE0B2', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Ticket size={24} color="#E65100" />
+          <h3 style={{ margin: 0, color: '#E65100', fontSize: '1.15rem' }}>Estrategia Resumida (Slide Deck)</h3>
+        </div>
+        
+        {/* Contenedor del Slide */}
+        <div style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '8px', border: '1px solid #FFE0B2', minHeight: '100px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: '#E65100', fontWeight: 'bold', textTransform: 'uppercase' }}>
+            {datosDiapositivas[diapositivaActual].title}
+          </span>
+          <p style={{ margin: '8px 0 0 0', fontSize: '0.95rem', color: '#444', lineHeight: '1.4' }}>
+            {datosDiapositivas[diapositivaActual].desc}
+          </p>
         </div>
 
-        {/* Visualización del Contenedor de Edificio */}
-        <div style={{ marginTop: '5px' }}>
-          <strong style={{ display: 'block', marginBottom: '8px', color: '#333', fontSize: '0.95rem' }}>📦 Diseño de Contenedores Plegables para Edificios:</strong>
-          <div style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid #ddd', backgroundColor: '#fafafa' }}>
-            <img 
-              src="/media/imagen-containers.jpeg" 
-              alt="Diseño contenedores plegables edificios" 
-              style={{ width: '100%', display: 'block', height: 'auto', maxHeight: '180px', objectFit: 'cover' }}
-              onError={(e) => { e.target.style.display = 'none'; }}
-            />
-          </div>
-          <p style={{ margin: '6px 0 0 0', fontSize: '0.8rem', color: '#666', fontStyle: 'italic' }}>
-            Mobiliario adaptativo propuesto para rellanos y comunidades de vecinos privadas.
-          </p>
+        {/* Botones de Navegación del Slide */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '5px' }}>
+          <button onClick={anteriorSlide} style={{ backgroundColor: '#E65100', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>◀ Anterior</button>
+          <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: 'bold' }}>{diapositivaActual + 1} / {datosDiapositivas.length}</span>
+          <button onClick={siguienteSlide} style={{ backgroundColor: '#E65100', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>Siguiente ▶</button>
+        </div>
+
+        {/* Enlace de descarga del PDF original */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: 'rgba(255,255,255,0.5)', borderRadius: '6px', marginTop: '5px', border: '1px dashed #FFE0B2' }}>
+          <span style={{ fontSize: '0.85rem', color: '#555' }}>¿Necesitas el documento oficial completo?</span>
+          <a href="/media/Elda_Circular_Strategy.pdf" download style={{ backgroundColor: '#E65100', color: '#fff', textDecoration: 'none', padding: '6px 12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '0.8rem' }}>
+            Descargar PDF
+          </a>
+        </div>
+      </div>
+
+      {/* SECCIÓN IMAGEN: ENCUADRE CUADRADO OPTIMIZADO */}
+      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', border: '1px solid #eee', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <h3 style={{ margin: 0, color: '#333', fontSize: '1.15rem' }}>📦 Contenedores de Edificio Plegables</h3>
+        <p style={{ margin: 0, color: '#555', fontSize: '0.9rem' }}>
+          Diseño del mobiliario adaptativo para rellanos y zonas comunes en comunidades privadas.
+        </p>
+        
+        {/* Caja de visualización simétrica y cuadrada */}
+        <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd', backgroundColor: '#f5f5f5', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '260px' }}>
+          <img 
+            src="/media/imagen-containers.jpeg" 
+            alt="Diseño contenedores plegables edificios" 
+            style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
         </div>
       </div>
 
@@ -278,7 +306,6 @@ function ModuloMultimedia() {
     </div>
   );
 }
-
 // =================================================================
 // COMPONENTE PRINCIPAL (APPLICATION MASTER)
 // =================================================================
