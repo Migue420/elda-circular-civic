@@ -137,29 +137,80 @@ function ModuloMultimedia() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
-      {/* SECCIÓN DEL REPRODUCTOR AUDIO DEL PODCAST */}
+      {/* 1. SECCIÓN AUDIO: PODCAST REVOLUCIÓN LOCAL */}
       <div style={{ backgroundColor: '#F1F8E9', padding: '20px', borderRadius: '10px', border: '1px solid #C5E1A5', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Radio size={28} color="#2E7D32" />
-          <h3 style={{ margin: 0, color: '#1B5E20' }}>Podcast: La Revolución del Ahorro Local</h3>
+          <Radio size={24} color="#2E7D32" />
+          <h3 style={{ margin: 0, color: '#1B5E20', fontSize: '1.2rem' }}>Podcast: La Revolución del Ahorro Local</h3>
         </div>
         <p style={{ margin: 0, color: '#555', fontSize: '0.95rem' }}>
           Escucha la tertulia analítica generada sobre el impacto de la Ley 7/2022 y el balance económico en el eje logístico Elda-Villena-Petrer.
         </p>
-        
         <audio controls style={{ width: '100%', marginTop: '5px' }}>
           <source src="/media/podcast-elda.m4a" type="audio/mp4" />
           Tu navegador no soporta la reproducción de audio nativa.
         </audio>
       </div>
 
-      {/* SECCIÓN DE DATOS DESPLEGABLES DEL NOTEBOOK */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <h3 style={{ margin: '10px 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <BookOpen size={22} /> Documentación del Plan Maestro 2026
+      {/* 2. SECCIÓN VÍDEO: VIDEO-TUTORIAL VIBE BOOGIE POP */}
+      <div style={{ backgroundColor: '#FFF3E0', padding: '20px', borderRadius: '10px', border: '1px solid #FFE0B2', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Radio size={24} color="#E65100" />
+          <h3 style={{ margin: 0, color: '#E65100', fontSize: '1.2rem' }}>Vídeo Presentación: Vibe Boogie Pop Art</h3>
+        </div>
+        <p style={{ margin: 0, color: '#555', fontSize: '0.95rem' }}>
+          Concepto audiovisual animado sobre la ingeniería de residuo cero y la interfaz del Civic OS.
+        </p>
+        <video controls style={{ width: '100%', borderRadius: '6px', backgroundColor: '#000', maxHeight: '240px' }}>
+          <source src="/media/vibe-boogie-pop.mp4" type="video/mp4" />
+          Tu navegador no soporta la reproducción de vídeo nativa.
+        </video>
+      </div>
+
+      {/* 3. SECCIÓN RECURSOS GRÁFICOS: PRESENTACIÓN E IMAGEN */}
+      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <h3 style={{ margin: 0, color: '#333', fontSize: '1.2rem', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
+          🖼️ Recursos y Diapositivas Estratégicas
         </h3>
 
-        {/* ACORDEÓN 1: EL PROTOCOLO DE LA PEGATINA ROJA */}
+        {/* Tarjeta del PDF Estratégico */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '6px', border: '1px solid #eee' }}>
+          <div>
+            <strong style={{ display: 'block', color: '#2E7D32' }}>📄 Elda_Circular_Strategy.pdf</strong>
+            <span style={{ fontSize: '0.85rem', color: '#666' }}>Diapositivas oficiales de la presentación del proyecto técnico.</span>
+          </div>
+          <a 
+            href="/media/Elda_Circular_Strategy.pdf" 
+            download
+            style={{ backgroundColor: '#2E7D32', color: '#fff', textDecoration: 'none', padding: '8px 12px', borderRadius: '4px', fontWeight: 'bold', fontSize: '0.85rem' }}
+          >
+            Descargar
+          </a>
+        </div>
+
+        {/* Muestra del Diseño del Contenedor de Edificio */}
+        <div style={{ marginTop: '5px' }}>
+          <strong style={{ display: 'block', marginBottom: '8px', color: '#333' }}>📦 Diseño de Contenedores Plegables para Edificios:</strong>
+          <div style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid #ddd' }}>
+            <img 
+              src="/media/imagen-containers.jpeg" 
+              alt="Diseño contenedores plegables para edificios" 
+              style={{ width: '100%', display: 'block', height: 'auto', maxHeight: '200px', objectFit: 'cover' }}
+              onError={(e) => { e.target.style.display = 'none'; }} // Evita icono roto si aún no has movido el archivo
+            />
+          </div>
+          <p style={{ margin: '6px 0 0 0', fontSize: '0.85rem', color: '#666', fontStyle: 'italic' }}>
+            Vista previa del mobiliario urbano adaptativo propuesto para rellanos y comunidades privadas.
+          </p>
+        </div>
+      </div>
+
+      {/* 4. ACORDEONES DE CONSULTA MAESTRA */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <h3 style={{ margin: '10px 0 5px 0', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem' }}>
+          <BookOpen size={20} /> Documentación del Plan Maestro 2026
+        </h3>
+
         <div style={{ border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden' }}>
           <button 
             onClick={() => toggleAcordeon('pegatina')}
@@ -179,7 +230,6 @@ function ModuloMultimedia() {
           )}
         </div>
 
-        {/* ACORDEÓN 2: RENTABILIDAD DEL EJE ELDA-VILLENA */}
         <div style={{ border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden' }}>
           <button 
             onClick={() => toggleAcordeon('rentabilidad')}
@@ -220,6 +270,11 @@ function ModuloMultimedia() {
             </div>
           )}
         </div>
+      </div>
+
+    </div>
+  );
+}
 
         {/* ACORDEÓN 3: INGENIERÍA SOCIAL (GENERACIÓN Z-ERO) */}
         <div style={{ border: '1px solid #ddd', borderRadius: '6px', overflow: 'hidden' }}>
